@@ -1,105 +1,94 @@
-# New Nx Repository
+# Tour Platform
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+An [Nx](https://nx.dev) monorepo for the Tour Platform — a tour browsing/booking product made up of a public web app, an admin dashboard, and a backing API gateway.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+## Apps
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/js?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
-## Try the full Nx platform
-🚀 If you haven't connected to Nx Cloud yet, [complete your setup here](https://cloud.nx.app/setup/connect-workspace/guide). Get faster builds with remote caching, distributed task execution, and self-healing CI. [See how your workspace can benefit](#nx-cloud).
-## Generate a library
+| App | Path | Stack | Purpose |
+| --- | --- | --- | --- |
+| `api-gateway` | `apps/api-gateway` | NestJS | Backend API gateway |
+| `app-user` | `apps/app-user` | Next.js | Customer-facing web app |
+| `app-dashboard` | `apps/app-dashboard` | React + Vite | Internal/admin dashboard |
+
+Each app has a matching `*-e2e` project (e.g. `app-user-e2e`) with [Playwright](https://playwright.dev) end-to-end tests.
+
+## Prerequisites
+
+- Node.js 20+
+- npm
+
+## Getting started
 
 ```sh
-npx nx g @nx/js:lib packages/pkg1 --publishable --importPath=@my-org/pkg1
+npm install
 ```
 
-## Run tasks
-
-To build the library use:
+Run an app in development mode:
 
 ```sh
-npx nx build pkg1
+npx nx dev app-user        # Next.js dev server
+npx nx dev app-dashboard    # Vite dev server
+npx nx serve api-gateway    # NestJS API
 ```
 
-To run any task with Nx use:
+## Common tasks
+
+Run a target for a single project:
 
 ```sh
 npx nx <target> <project-name>
+# e.g. npx nx build app-user
+# e.g. npx nx test api-gateway
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+Run a target across every project, or only what's affected by your changes:
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Versioning and releasing
-
-To version and release the library use
-
-```
-npx nx release
+```sh
+npx nx run-many -t build
+npx nx affected -t test lint
 ```
 
-Pass `--dry-run` to see what would happen without actually releasing the library.
+Available targets per project (build, dev/serve, test, lint, e2e) are either inferred from each app's tooling config (Next.js, Vite, Webpack, Jest, Playwright, ESLint) or defined in its `package.json`. Run `npx nx show project <name>` to see exactly what's available.
 
-[Learn more about Nx release &raquo;](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+Explore how the projects relate to one another:
 
-## Keep TypeScript project references up to date
+```sh
+npx nx graph
+```
 
-Nx automatically updates TypeScript [project references](https://www.typescriptlang.org/docs/handbook/project-references.html) in `tsconfig.json` files to ensure they remain accurate based on your project dependencies (`import` or `require` statements). This sync is automatically done when running tasks such as `build` or `typecheck`, which require updated references to function correctly.
+## Project structure
 
-To manually trigger the process to sync the project graph dependencies information to the TypeScript project references, run the following command:
+```
+apps/
+  api-gateway/        NestJS API gateway
+  api-gateway-e2e/
+  app-user/            Next.js customer app
+  app-user-e2e/
+  app-dashboard/       React + Vite admin dashboard
+  app-dashboard-e2e/
+packages/              Shared libraries (none yet)
+```
+
+## Keeping TypeScript project references in sync
+
+Nx keeps TypeScript [project references](https://www.typescriptlang.org/docs/handbook/project-references.html) in `tsconfig.json` files up to date based on each project's dependencies. This runs automatically for tasks like `build`/`typecheck`, or manually via:
 
 ```sh
 npx nx sync
 ```
 
-You can enforce that the TypeScript project references are always in the correct state when running in CI by adding a step to your CI job configuration that runs the following command:
+To verify references are correct in CI without modifying files:
 
 ```sh
 npx nx sync:check
 ```
 
-[Learn more about nx sync](https://nx.dev/reference/nx-commands#sync)
-
-## Nx Cloud
-
-Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
-
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-### Set up CI (non-Github Actions CI)
-
-**Note:** This is only required if your CI provider is not GitHub Actions.
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
-```
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
 ## Useful links
 
-Learn more:
+- [Nx documentation](https://nx.dev)
+- [Running tasks](https://nx.dev/features/run-tasks)
+- [Nx and CI](https://nx.dev/ci/intro/ci-with-nx)
 
-- [Learn more about this workspace setup](https://nx.dev/nx-api/js?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## License
 
-And join the Nx community:
-
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+MIT
