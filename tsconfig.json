@@ -14,6 +14,12 @@
     },
     {
       "path": "./apps/app-user"
+    },
+    {
+      "path": "./apps/app-dashboard-e2e"
+    },
+    {
+      "path": "./apps/app-dashboard"
     }
   ]
 }
