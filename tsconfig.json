@@ -8,6 +8,12 @@
     },
     {
       "path": "./apps/api-gateway"
+    },
+    {
+      "path": "./apps/app-user-e2e"
+    },
+    {
+      "path": "./apps/app-user"
     }
   ]
 }
